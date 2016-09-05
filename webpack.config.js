@@ -6,6 +6,7 @@ var postcss = require('postcss');
 var postcssCalc = require('postcss-calc');
 var postcssImport = require('postcss-import');
 var postcssNested = require('postcss-nested');
+var postcssAutoprefixer = require('autoprefixer');
 var isHot = process.argv.indexOf('--hot') !== -1;
 
 module.exports = {
@@ -65,6 +66,7 @@ module.exports = {
       postcssImport({addDependencyTo: webpack}),
       postcssNested,
       postcssCalc,
+      postcssAutoprefixer
     ]
   }
 };

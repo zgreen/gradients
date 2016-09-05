@@ -5,23 +5,16 @@ export default class Stop extends React.Component {
   constructor (props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-    // this.setStyle = this.setStyle.bind(this);
   }
   handleClick () {
     this.props.freezeStop(this.props.index);
   }
-  // setStyle () {
-  //   let result = this.props.coords.x;
-  //   if (this.props.coords.frozen) {
-  //     result =
-  //   }
-  // }
   render () {
     return (
-      <span style={{left: this.props.coords.x}}
+      <span style={{left: this.props.coords.x, opacity: this.props.stopsVisible ? '1' : '0'}}
         className={styles.stop}
         onClick={this.handleClick}>
-        <span className={styles.stopCounter}>{this.props.index}</span>
+        <span className={styles.stopCounter}><span className={styles.stopArrow}>&larr;</span>{this.props.index}<span className={styles.stopArrow}>&rarr;</span></span>
       </span>
     )
   }
@@ -31,5 +24,6 @@ Stop.propTypes = {
   degree: React.PropTypes.number,
   index: React.PropTypes.number,
   coords: React.PropTypes.object,
-  handleClick: React.PropTypes.func
+  handleClick: React.PropTypes.func,
+  stopsVisible: React.PropTypes.bool
 };
