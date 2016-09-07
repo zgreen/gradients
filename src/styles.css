@@ -1,3 +1,5 @@
+@value letter-spacing 0.15em;
+
 html {
   box-sizing: border-box;
 }
@@ -36,12 +38,15 @@ body {
 .controls {
   background-color: #111;
   color: white;
-  font-weight: bold;
   height: 100%;
   left: -20%;
   text-transform: uppercase;
   width: 20%;
   position: absolute;
+  label {
+    letter-spacing: letter-spacing;
+    font-size: 0.8em;
+  }
 }
 
 .clearButton,
@@ -58,7 +63,7 @@ body {
   background-color: transparent;
   cursor: pointer;
   font-size: 0.75em;
-  letter-spacing: 0.15em;
+  letter-spacing: letter-spacing;
   text-transform: uppercase;
   white-space: nowrap;
   z-index: 1;
@@ -108,40 +113,6 @@ body {
   border-radius: 50%;
 }
 
-.degreeDial {
-  appearance: none;
-  background: white;
-  border: 1px solid #111;
-  border-radius: 50%;
-  height: 4em;
-  position: relative;
-  width: 4em;
-  &::before {
-    content: '';
-    display: block;
-    position: absolute;
-  }
-  &::before {
-    background-color: #111;
-    border-radius: 50%;
-    height: 0.5rem;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 0.5rem;
-  }
-}
-
-.dialHand {
-  background-color: #111;
-  height: 50%;
-  left: 50%;
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  width: 1px;
-}
-
 .menuToggle {
   left: 100%;
   top: 0;
@@ -162,8 +133,8 @@ body {
 
 .stopList {
   color: white;
-  /*margin: 0;
-  padding: 0;*/
+  margin: 0;
+  padding: 0;
 }
 
 .stopItem {
@@ -180,4 +151,19 @@ body {
 
 .stopArrow {
   font: 400 0.5em/1 sans-serif;
+}
+
+.stopMenuItem {
+  display: flex;
+  flex-wrap: wrap;
+  > div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  /*input {
+    border: 0;
+    height: 1em;
+    width: 2em;
+  }*/
 }

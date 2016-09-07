@@ -1,7 +1,7 @@
 import React from 'react';
 import * as styles from './styles.css';
 
-export default class Stop extends React.Component {
+class Stop extends React.Component {
   constructor (props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
@@ -11,14 +11,14 @@ export default class Stop extends React.Component {
   }
   render () {
     return (
-      <span style={{left: this.props.coords.x, opacity: this.props.stopsVisible ? '1' : '0'}}
+      <span style={{left: `${this.props.coords.x}px`, opacity: this.props.stopsVisible ? '1' : '0'}}
         className={styles.stop}
         onClick={this.handleClick}>
         <span className={styles.stopCounter}><span className={styles.stopArrow}>&larr;</span>{this.props.index}<span className={styles.stopArrow}>&rarr;</span></span>
       </span>
     )
   }
-}
+};
 
 Stop.propTypes = {
   degree: React.PropTypes.number,
@@ -27,3 +27,5 @@ Stop.propTypes = {
   handleClick: React.PropTypes.func,
   stopsVisible: React.PropTypes.bool
 };
+
+export default Stop;
