@@ -1,40 +1,37 @@
-'use strict';
+'use strict'
 
-var path = require('path');
-var webpack = require('webpack');
-var postcss = require('postcss');
-var postcssCalc = require('postcss-calc');
-var postcssImport = require('postcss-import');
-var postcssNested = require('postcss-nested');
-var postcssAutoprefixer = require('autoprefixer');
-var isHot = process.argv.indexOf('--hot') !== -1;
+var path = require('path')
+var webpack = require('webpack')
+var postcss = require('postcss')
+var postcssCalc = require('postcss-calc')
+var postcssImport = require('postcss-import')
+var postcssNested = require('postcss-nested')
+var postcssAutoprefixer = require('autoprefixer')
+var isHot = process.argv.indexOf('--hot') !== -1
 
 module.exports = {
-	context: __dirname,
+	                    context: __dirname,
   entry: {
-    app: 'src/App.jsx',
-  },
-  eslint: {
-    configFile: '.eslintrc',
+    app: 'src/App.jsx'
   },
   output: {
     path: 'build',
     publicPath: !isHot ? '/build/' : 'http://localhost:8080/build/',
-    filename: '[name].bundle.js',
+    filename: '[name].bundle.js'
   },
   resolve: {
     root: path.resolve(__dirname),
-		extensions: ['', '.js', '.jsx', '.json'],
+		                                        extensions: ['', '.js', '.jsx', '.json'],
     modulesDirectories: [
       'node_modules'
     ]
   },
   module: {
-    preloaders: [
+    preLoaders: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'eslint-loader',
+        loader: 'eslint-loader'
       }
     ],
     loaders: [
@@ -52,16 +49,16 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        loader: 'dom!html',
+        loader: 'dom!html'
       },
-			{
+			                                                            {
         test: /\.json$/,
         loader: 'json',
         exclude: /node_modules/
       }
     ]
   },
-  postcss: function(webpack) {
+  postcss: function (webpack) {
     return [
       postcssImport({addDependencyTo: webpack}),
       postcssNested,
@@ -69,4 +66,4 @@ module.exports = {
       postcssAutoprefixer
     ]
   }
-};
+}

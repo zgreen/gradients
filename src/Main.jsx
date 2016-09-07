@@ -1,139 +1,128 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import Stop from './Stop';
-import { store, connector } from './Store';
-import * as styles from './styles.css';
+import Stop from './Stop'
+import { store, connector } from './Store'
+import * as styles from './styles.css'
 
 class Main extends React.Component {
   constructor (props) {
-    super(props);
+    super(props)
     this.state = {
       menuIsOpen: false,
-      stopsAreVisible: true
+      stopsAreVisible: true,
+      copiedMessageIsVisible: false
     }
-    this.copyGradient = this.copyGradient.bind(this);
-    this.clearStops = this.clearStops.bind(this);
-    this.mouseMove = this.mouseMove.bind(this);
-    this.newStop = this.newStop.bind(this);
-    this.freezeStop = this.freezeStop.bind(this);
-    this.removeStop = this.removeStop.bind(this);
-    this.setBackground = this.setBackground.bind(this);
-    this.toggleRoundedValues = this.toggleRoundedValues.bind(this);
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.toggleStopsVisibility = this.toggleStopsVisibility.bind(this);
-    this.updateDegree = this.updateDegree.bind(this);
-    this.updateStopPosition = this.updateStopPosition.bind(this);
+    this.copyGradient = this.copyGradient.bind(this)
+    this.clearStops = this.clearStops.bind(this)
+    this.mouseMove = this.mouseMove.bind(this)
+    this.newStop = this.newStop.bind(this)
+    this.freezeStop = this.freezeStop.bind(this)
+    this.removeStop = this.removeStop.bind(this)
+    this.setBackground = this.setBackground.bind(this)
+    this.toggleRoundedValues = this.toggleRoundedValues.bind(this)
+    this.toggleMenu = this.toggleMenu.bind(this)
+    this.toggleStopsVisibility = this.toggleStopsVisibility.bind(this)
+    this.updateDegree = this.updateDegree.bind(this)
+    this.updateStopPosition = this.updateStopPosition.bind(this)
   }
   copyGradient (event) {
     if (document.queryCommandSupported('copy')) {
-      event.persist();
-      const message = document.createElement('p');
-      message.className = styles.copiedMessage;
-      message.textContent = 'Copied!';
-      event.target.select();
-      document.execCommand('copy');
-      event.target.parentElement.appendChild(message);
-      event.target.style.opacity = 0;
-      message.style.opacity = 1;
+      this.setState({ copiedMessageIsVisible: true })
+      event.persist()
+      event.target.select()
+      document.execCommand('copy')
       setTimeout(() => {
-        message.style.opacity = 0;
-      }, 900);
-      setTimeout(() => {
-        event.target.parentElement.removeChild(message);
-        event.target.style.opacity = 1;
-      }, 1000);
+        this.setState({ copiedMessageIsVisible: false })
+      }, 1000)
     }
   }
   clearStops () {
-    return false;
-    // this.setState({ stops: initialStops });
+    this.props.setStops([])
   }
   freezeStop (index) {
-    const stops = store.getState().stops;
+    const stops = store.getState().stops
     this.props.setStops(
       stops.map((stop, idx) => {
         if (idx === index) {
-          stop.frozen = !stop.frozen;
+          stop.frozen = !stop.frozen
         }
-        return stop;
+        return stop
       }, [])
-    );
+    )
   }
   mouseMove (event) {
-    const stops = store.getState().stops;
+    const stops = store.getState().stops
     if (stops.filter((stop, idx) => (stop.frozen)).length === stops.length) {
-      return;
+      return
     } else {
       const result = stops.map((stop) => {
         if (!stop.frozen) {
-          stop.x = event.clientX;
-          stop.y = event.clientY;
+          stop.x = event.clientX
+          stop.y = event.clientY
         }
-        return stop;
-      });
-      this.props.setStops(result);
+        return stop
+      })
+      this.props.setStops(result)
     }
   }
   removeStop (idx) {
-    const stops = store.getState().stops;
+    const stops = store.getState().stops
     if (stops.length >= 2) {
-      this.props.setStops(stops.slice(0, idx).concat(stops.slice(idx + 1)));
+      this.props.setStops(stops.slice(0, idx).concat(stops.slice(idx + 1)))
     }
   }
   setBackground () {
     const percentageStops = store.getState().stops.map((stop) => {
-      const percentage = (stop.x / window.innerWidth) * 100;
-      return `${stop.color} ${store.getState().shouldRoundValues ? Math.round(percentage) : percentage}%`;
-    });
-    return `linear-gradient(${store.getState().shouldRoundValues ? Math.round(store.getState().degree) : store.getState().degree}deg, ${percentageStops.join(', ')})`;
+      const percentage = (stop.x / window.innerWidth) * 100
+      return `${stop.color} ${store.getState().shouldRoundValues ? Math.round(percentage) : percentage}%`
+    })
+    return `linear-gradient(${store.getState().shouldRoundValues ? Math.round(store.getState().degree) : store.getState().degree}deg, ${percentageStops.join(', ')})`
   }
   newStop (event, didAddFromMenu = false) {
-    if (store.getState().stops.filter((stop, idx) => (stop.frozen)).length ===
-      store.getState().stops.length) {
-      const stops = store.getState().stops;
+    const stops = store.getState().stops
+    if (stops.filter((stop, idx) => (stop.frozen)).length === stops.length) {
       const result = stops
         .slice(0, stops.length - 1)
         .concat(
-          {
-            x: didAddFromMenu ? ((window.innerWidth - stops[stops.length - 2].x) / 2) + stops[stops.length - 2].x : event.clientX,
-            y: event.clientY,
-            frozen: didAddFromMenu,
-            color: this.state.currentColor
-          },
+        {
+          x: didAddFromMenu ? ((window.innerWidth - stops[stops.length - 2].x) / 2) + stops[stops.length - 2].x : event.clientX,
+          y: event.clientY,
+          frozen: didAddFromMenu,
+          color: stops[stops.length - 1].color
+        },
           stops[stops.length - 1]
         )
-      this.props.setStops(result);
+      this.props.setStops(result)
     }
   }
   toggleMenu () {
-    this.setState({ menuIsOpen: !this.state.menuIsOpen });
+    this.setState({ menuIsOpen: !this.state.menuIsOpen })
   }
   toggleRoundedValues () {
-    this.props.setRoundValues(!store.getState().shouldRoundValues);
+    this.props.setRoundValues(!store.getState().shouldRoundValues)
   }
   toggleStopsVisibility () {
-    this.setState({ stopsAreVisible: !this.state.stopsAreVisible });
+    this.setState({ stopsAreVisible: !this.state.stopsAreVisible })
   }
   updateStopColor (event, index) {
     this.props.setStops(store.getState().stops.map((stop, idx) => {
       if (index === idx) {
-        stop.color = event.target.value;
+        stop.color = event.target.value
       }
-      return stop;
-    }));
+      return stop
+    }))
   }
   updateDegree (event) {
     if (event.target.value.length) {
-      this.props.setDegree(event.target.value);
+      this.props.setDegree(event.target.value)
     }
   }
-  updateStopPosition(event, index) {
+  updateStopPosition (event, index) {
     this.props.setStops(store.getState().stops.map((stop, idx) => {
       if (index === idx) {
         stop.x = (event.target.value * window.innerWidth) / 100
       }
-      return stop;
-    }));
+      return stop
+    }))
   }
   render () {
     return (
@@ -141,54 +130,60 @@ class Main extends React.Component {
         onMouseMove={this.mouseMove}
         onDoubleClick={this.newStop}
         style={{background: this.setBackground()}}>
-        <div className={styles.controls} style={{transform: this.state.menuIsOpen ? 'translateX(100%)' : 'translateX(0%)'}}>
-          <button
-            className={styles.menuToggle}
-            onClick={this.toggleMenu}>{this.state.menuIsOpen ? '\u2190 Close Menu' : '\u2192 Open Menu'}</button>
-          <button onClick={(event) => {this.newStop(event, true)}}>New stop</button>
-          <form action="">
-            <label htmlFor="">Degree</label>
+        <button
+          className={this.state.menuIsOpen
+            ? `${styles.menuToggle} ${styles.menuToggleOpen}`
+            : styles.menuToggle}
+          onClick={this.toggleMenu}>{this.state.menuIsOpen ? '\u2190 Close Menu' : '\u2192 Open Menu'}</button>
+        <div className={styles.controls}
+          style={{transform: this.state.menuIsOpen ? 'translateX(100%)' : 'translateX(0%)'}}
+          onDoubleClick={function (event) { event.stopPropagation() }}>
+          <button onClick={(event) => { this.newStop(event, true) }}
+            className={styles.newStopButton}><span>New stop</span></button>
+          <form className={styles.degreeForm} action=''>
+            <label htmlFor=''><h2 className={styles.menuHeading}>Degree</h2></label>
             <input
               onChange={this.updateDegree}
               value={parseInt(store.getState().degree)}
-              type="number"
+              type='number'
             />
           </form>
-          <h2>Stops</h2>
+          <h2 className={styles.menuHeading}>Stops</h2>
           <ol className={styles.stopList}>
             {store.getState().stops.map((stop, idx) => (
               <li className={styles.stopItem} key={idx}>
-                <form className={styles.stopMenuItem} action="">
+                <form className={styles.stopMenuItem} action=''>
                   <div>
-                    <label htmlFor="">Percentage</label>
-                    <input min="0"
-                      max="100"
+                    <label htmlFor=''>Percentage</label>
+                    <input min='0'
+                      max='100'
                       value={(stop.x / window.innerWidth) * 100}
-                      onChange={(event) => {this.updateStopPosition(event, idx)}}
-                      type="number"/>
+                      onChange={(event) => { this.updateStopPosition(event, idx) }}
+                      type='number' />
                   </div>
                   <div>
-                    <label htmlFor="">Color</label>
+                    <label htmlFor=''>Color</label>
                     <input
-                      type="color"
+                      type='color'
                       value={stop.color}
-                      onChange={(event) => {this.updateStopColor(event, idx)}}
+                      onChange={(event) => { this.updateStopColor(event, idx) }}
                       className={styles.colorInput}
                     />
                   </div>
+                  {idx > 0 && idx < store.getState().stops.length - 1
+                    ? <button className={styles.removeStopButton} onClick={this.removeStop.bind(null, idx)}>Remove stop</button>
+                    : null
+                  }
                 </form>
-                {idx > 0 && idx < store.getState().stops.length - 1 ?
-                  <button onClick={this.removeStop.bind(null, idx)}
-                    aria-label="Remove stop">X</button> :
-                  null
-                }
               </li>
             ))}
           </ol>
-          <form action="">
-            <label htmlFor="">Round all values to nearest integer?</label>
-            <input onClick={this.toggleRoundedValues} defaultChecked={store.getState().shouldRoundValues} type="checkbox"/>
+          <form className={styles.roundingForm} action=''>
+            <label htmlFor=''>Round all values to nearest integer?</label>
+            <input onClick={this.toggleRoundedValues}
+              defaultChecked={store.getState().shouldRoundValues} type='checkbox' />
           </form>
+          <a className={styles.githubLink} href="https://github.com/zgreen/gradients">View On Github</a>
         </div>
         {store.getState().stops.map((stop, idx) => (
           <Stop index={idx}
@@ -201,21 +196,30 @@ class Main extends React.Component {
           />
         ))}
         <div
-          onMouseMove={(event) => {event.stopPropagation()}}
-          onClick={(event) => {event.stopPropagation()}}
-          onDoubleClick={(event) => {event.stopPropagation()}}
+          onMouseMove={function (event) { event.stopPropagation() }}
+          onClick={function (event) { event.stopPropagation() }}
+          onDoubleClick={function (event) { event.stopPropagation() }}
           className={styles.codeContainer}
         >
           <button className={styles.clearButton}
             onClick={this.clearStops}>Start over</button>
           <input
-            className={styles.code}
+            className={this.state.copiedMessageIsVisible
+              ? `${styles.code} ${styles.hidden}`
+              : styles.code
+            }
             onClick={this.copyGradient}
             readOnly
-            type="text"
+            type='text'
             value={this.setBackground()}
           />
-        <button className={styles.toggleStopsButton} onClick={this.toggleStopsVisibility}>{this.state.stopsAreVisible ? 'Hide' : 'Show'} stops</button>
+          <p
+            aria-hidden={!this.state.copiedMessageIsVisible}
+            className={(this.state.copiedMessageIsVisible
+              ? `${styles.copiedMessage}`
+              : `${styles.copiedMessage} ${styles.hidden}`)}>Copied!</p>
+          <button className={styles.toggleStopsButton}
+            onClick={this.toggleStopsVisibility}>{this.state.stopsAreVisible ? 'Hide' : 'Show'} stops</button>
         </div>
       </div>
     )
@@ -227,11 +231,10 @@ Main.propTypes = {
   stops: React.PropTypes.arrayOf(React.PropTypes.object),
   setDegree: React.PropTypes.func,
   setRoundValues: React.PropTypes.func
-};
+}
 
-module.exports = connector(Main);
-// export default connector(Main);
+module.exports = connector(Main)
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept()
 }

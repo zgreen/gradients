@@ -1,10 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Stop from './Stop';
-import Main from './Main';
-import { store } from './Store';
-import { Provider } from 'react-redux';
-import * as styles from './styles.css';
+import Main from './Main'
+import { store } from './Store'
+import { Provider } from 'react-redux'
 
 class App extends React.Component {
   render () {
@@ -16,8 +14,8 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'))
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept()
 }

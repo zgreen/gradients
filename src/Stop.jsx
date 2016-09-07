@@ -1,13 +1,13 @@
-import React from 'react';
-import * as styles from './styles.css';
+import React from 'react'
+import * as styles from './styles.css'
 
 class Stop extends React.Component {
   constructor (props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
+    super(props)
+    this.handleClick = this.handleClick.bind(this)
   }
   handleClick () {
-    this.props.freezeStop(this.props.index);
+    this.props.freezeStop(this.props.index)
   }
   render () {
     return (
@@ -21,11 +21,11 @@ class Stop extends React.Component {
 };
 
 Stop.propTypes = {
-  degree: React.PropTypes.number,
   index: React.PropTypes.number,
   coords: React.PropTypes.object,
+  freezeStop: React.PropTypes.func,
   handleClick: React.PropTypes.func,
   stopsVisible: React.PropTypes.bool
-};
+}
 
-export default Stop;
+export default Stop

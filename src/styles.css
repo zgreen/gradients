@@ -11,6 +11,7 @@ html {
 }
 
 body {
+  counter-reset: stopItem;
   font-family: sans-serif;
   margin: 0;
   padding: 0;
@@ -30,6 +31,10 @@ body {
   z-index: 1;
 }
 
+.menuToggleOpen {
+  transform: translateX(300px);
+}
+
 .controls,
 .menuToggle {
   transition: transform 0.2s ease;
@@ -39,13 +44,32 @@ body {
   background-color: #111;
   color: white;
   height: 100%;
-  left: -20%;
+  left: calc(-300/16em);
+  padding: 1em;
   text-transform: uppercase;
-  width: 20%;
+  overflow: scroll;
   position: absolute;
+  width: calc(300/16em);
+  z-index: 3;
+  > form, > ol, > button {
+    margin: 0 0 2rem;
+  }
   label {
     letter-spacing: letter-spacing;
     font-size: 0.8em;
+  }
+  input[type="number"] {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    font-family: monospace;
+    padding: 0.5em;
+    min-width: calc(80/16rem);
+  }
+  input[type="color"] {
+    background-color: transparent;
+    border: 1px solid white;
+    min-width: calc(80/16rem);
   }
 }
 
@@ -55,16 +79,20 @@ body {
   flex: 0 1 auto;
 }
 
+.actionText {
+  font-size: 0.75em;
+  letter-spacing: letter-spacing;
+  text-transform: uppercase;
+}
+
 .clearButton,
 .toggleStopsButton,
 .menuToggle {
+  composes: actionText;
   border: 0;
   appearance: none;
   background-color: transparent;
   cursor: pointer;
-  font-size: 0.75em;
-  letter-spacing: letter-spacing;
-  text-transform: uppercase;
   white-space: nowrap;
   z-index: 1;
 }
@@ -84,17 +112,15 @@ body {
 }
 
 .copiedMessage {
+  composes: actionText;
   left: 50%;
   margin: 0;
-  text-align: center;
-  transform: translateX(-50%);
-  transition: opacity 0.3s ease;
-}
-
-.copiedMessage {
-  opacity: 0;
+  opacity: 1;
   position: absolute;
-  transform: translate(-50%, -100%);
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
 }
 
 .codeContainer {
@@ -107,14 +133,47 @@ body {
   z-index: 1;
 }
 
-.colorInput {
-  background: none;
-  border: 0;
-  border-radius: 50%;
+.degreeForm {
+  > * {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+  h2 {
+    margin-top: 0;
+  }
+  input {
+    font-size: 1.5em;
+  }
+}
+
+.roundingForm {
+  align-items: center;
+  display: flex;
+  input {
+    height: 2em;
+    width: 2em;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.githubLink {
+  composes: actionText;
+  color: white;
+  display: block;
+  text-align: center;
+  text-decoration: none;
 }
 
 .menuToggle {
-  left: 100%;
+  left: 0;
   top: 0;
   position: absolute;
   z-index: 1;
@@ -137,8 +196,53 @@ body {
   padding: 0;
 }
 
+.menuHeading {
+  font: 400 1.1rem/1 sans-serif;
+  letter-spacing: letter-spacing;
+  padding-bottom: 0.25rem;
+  text-align: center;
+}
+
+.newStopButton {
+  composes: menuHeading;
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 1em;
+  text-transform: uppercase;
+  width: 100%;
+  span {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    &::after {
+      content: '+';
+      display: block;
+      margin-left: 0.25em;
+    }
+  }
+}
+
+.removeStopButton {
+  background-color: transparent;
+  border: 0;
+  color: #FF4136;
+  cursor: pointer;
+  font-size: 0.6em;
+  margin: 1em 0 0 auto;
+  padding: 0;
+  text-transform: uppercase;
+}
+
 .stopItem {
   display: flex;
+  margin-bottom: 1em;
+  &::before {
+    align-self: center;
+    content: counter(stopItem);
+    counter-increment: stopItem;
+    padding-right: 1em;
+  }
 }
 
 .stopCounter {
@@ -154,16 +258,17 @@ body {
 }
 
 .stopMenuItem {
+  border-left: 1px solid white;
   display: flex;
   flex-wrap: wrap;
+  padding-left: 1em;
   > div {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 0.5em;
     width: 100%;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
-  /*input {
-    border: 0;
-    height: 1em;
-    width: 2em;
-  }*/
 }
