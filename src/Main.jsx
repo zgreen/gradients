@@ -1,5 +1,7 @@
 import React from 'react'
 import Stop from './Stop'
+import Button from './Button'
+import Input from './Input'
 import { store, connector } from './Store'
 import * as styles from './styles.css'
 
@@ -22,6 +24,7 @@ class Main extends React.Component {
     this.toggleMenu = this.toggleMenu.bind(this)
     this.toggleStopsVisibility = this.toggleStopsVisibility.bind(this)
     this.updateDegree = this.updateDegree.bind(this)
+    this.updateStopColor = this.updateStopColor.bind(this)
     this.updateStopPosition = this.updateStopPosition.bind(this)
   }
   copyGradient (event) {
@@ -138,8 +141,12 @@ class Main extends React.Component {
         <div className={styles.controls}
           style={{transform: this.state.menuIsOpen ? 'translateX(100%)' : 'translateX(0%)'}}
           onDoubleClick={function (event) { event.stopPropagation() }}>
-          <button onClick={(event) => { this.newStop(event, true) }}
-            className={styles.newStopButton}><span>New stop</span></button>
+          <Button text={'New stop'}
+            clickCallback={this.newStop}
+            callbackArgs={[true]}
+            className={styles.newStopButton}
+            shouldUseEvent
+          />
           <form className={styles.degreeForm} action=''>
             <label htmlFor=''><h2 className={styles.menuHeading}>Degree</h2></label>
             <input
@@ -155,23 +162,27 @@ class Main extends React.Component {
                 <form className={styles.stopMenuItem} action=''>
                   <div>
                     <label htmlFor=''>Percentage</label>
-                    <input min='0'
-                      max='100'
-                      value={(stop.x / window.innerWidth) * 100}
-                      onChange={(event) => { this.updateStopPosition(event, idx) }}
-                      type='number' />
+                    <Input attrs={{type: 'number'}}
+                      numVal={(stop.x / window.innerWidth) * 100}
+                      index={idx}
+                      clickCallback={this.updateStopPosition}
+                    />
                   </div>
                   <div>
                     <label htmlFor=''>Color</label>
-                    <input
-                      type='color'
-                      value={stop.color}
-                      onChange={(event) => { this.updateStopColor(event, idx) }}
+                    <Input attrs={{type: 'color'}}
+                      stringVal={stop.color}
+                      index={idx}
+                      clickCallback={this.updateStopColor}
                       className={styles.colorInput}
                     />
                   </div>
                   {idx > 0 && idx < store.getState().stops.length - 1
-                    ? <button className={styles.removeStopButton} onClick={this.removeStop.bind(null, idx)}>Remove stop</button>
+                    ? <Button className={styles.removeStopButton}
+                      clickCallback={this.removeStop}
+                      callbackArgs={[idx]}
+                      text={'Remove stop'}
+                      shouldUseEvent={false} />
                     : null
                   }
                 </form>

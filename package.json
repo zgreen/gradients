@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --content-base --inline --hot",
-    "build": "webpack --config webpack.config.js --devtool source-map --output-pathinfo -p",
+    "build": "webpack --config webpack.config.js --devtool cheap-module-source-map --output-pathinfo -p --define process.env.NODE_ENV='\"production\"'",
     "standard": "standard"
   },
   "author": "Zach Green",
@@ -46,6 +46,6 @@
     "react-color": "^2.2.7"
   },
   "standard": {
-    "ignore": ["build"]
+  "ignore": ["build"]
   }
 }

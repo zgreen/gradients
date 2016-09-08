@@ -64,12 +64,10 @@ body {
     color: white;
     font-family: monospace;
     padding: 0.5em;
-    min-width: calc(80/16rem);
   }
   input[type="color"] {
     background-color: transparent;
     border: 1px solid white;
-    min-width: calc(80/16rem);
   }
 }
 
@@ -270,5 +268,8 @@ body {
     &:last-of-type {
       margin-bottom: 0;
     }
+  }
+  input {
+    width: 5rem;
   }
 }

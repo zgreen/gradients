@@ -32,7 +32,11 @@ const reducer = (state = initialState, action) => {
 }
 
 const mapStateToProps = (state) => {
-  return { stops: state.stops, degree: state.degree }
+  return {
+    stops: state.stops,
+    degree: state.degree,
+    shouldRoundValues: state.shouldRoundValues
+  }
 }
 const mapDispatchToProps = (dispatch) => ({
   setStops (stops) {
