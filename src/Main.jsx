@@ -162,7 +162,7 @@ class Main extends React.Component {
                 <form className={styles.stopMenuItem} action=''>
                   <div>
                     <label htmlFor=''>Percentage</label>
-                    <Input attrs={{type: 'number'}}
+                    <Input attrs={{type: 'number', min: '0', max: '100'}}
                       numVal={(stop.x / window.innerWidth) * 100}
                       index={idx}
                       clickCallback={this.updateStopPosition}
